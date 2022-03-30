@@ -173,7 +173,7 @@ def records_to_graph():
     # Nodes for rating
     for m_id in movies:
         for i in range(1, 6):
-            r_id = m_id + "_" + i
+            r_id = m_id + "_" + str(i)
             node = Node(id=nodeid, name=r_id, type="rating")
             nodedict[r_id] = node
             nodelist.append(node)
@@ -192,8 +192,9 @@ def records_to_graph():
 
     # Add all edges from movie nodes to --> movie-ratings, actors, directors and genre nodes.
     for m_id in movies:
-        for r_id in range(1, 6):  # One movie, many ratings
+        for i in range(1, 6):  # One movie, many ratings
             # Add neighbour Node r_id to movie m_id and vice-versa
+            r_id = m_id + "_" + str(i)
             nodedict[m_id].neighbors.append(nodedict[r_id])
             nodedict[r_id].neighbors.append(nodedict[m_id])
 
@@ -209,8 +210,9 @@ def records_to_graph():
 
         # Add neighbour Node d_id to movie m_id and vice-versa
         d_id = movies[m_id].director
-        nodedict[m_id].neighbors.append(nodedict[d_id])
-        nodedict[d_id].neighbors.append(nodedict[m_id])
+        if d_id:
+            nodedict[m_id].neighbors.append(nodedict[d_id])
+            nodedict[d_id].neighbors.append(nodedict[m_id])
 
     # Write out the graph
     for node in nodelist:
